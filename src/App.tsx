@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
-
-type Pokemon = {
-  id: number;
-  name: string;
-  classfication: string;
-}
+import { Pokemon } from './types';
+import PokemonList from './PokemonList';
 
 function formatSearchURL(query: string, nextPageToken: string | null): string {
   if (nextPageToken) {
@@ -21,6 +17,7 @@ function App() {
   function handleSearchChange(e: React.FormEvent<HTMLInputElement>): void {
     const currentQuery = e.currentTarget.value;
     setSearchTerm(currentQuery);
+    setPokemonResults([]);
     if (currentQuery) {
       getPokemonResultFromAPI(currentQuery, null);
     }
@@ -37,13 +34,14 @@ function App() {
         throw Error("Something happened when searching for pokemon.");
       })
       .then(results => {
+        // if there is a next page token, request that page next, else ad results to state
         const newNextPage = results.nextPage;
         if (newNextPage) {
-          console.log("got next page token", newNextPage);
           setPokemonResults([...pokemonResults, ...results.pokemon]);
-          getPokemonResultFromAPI(query, newNextPage);
+          // getPokemonResultFromAPI(query, newNextPage);
+        } else {
+          setPokemonResults([...pokemonResults, ...results.pokemon]);
         }
-        setPokemonResults([...pokemonResults, ...results.pokemon]);
       })
       .catch(err => console.error(err));
   }
@@ -57,6 +55,8 @@ function App() {
         onChange={handleSearchChange} 
         type="text"
       />
+
+    <PokemonList pokemonResults={pokemonResults}/>
     </div>
   );
 }
