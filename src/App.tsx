@@ -1,59 +1,55 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { Pokemon } from './types';
 import PokemonList from './PokemonList';
 
 function formatSearchURL(query: string, nextPageToken: string | null): string {
   if (nextPageToken) {
-    return `https://hungry-woolly-leech.glitch.me/api/pokemon/search/${query}?page=${nextPageToken}`
+    return `https://hungry-woolly-leech.glitch.me/api/pokemon/search/${query}?page=${nextPageToken}&chaos=true`
   }
-  return `https://hungry-woolly-leech.glitch.me/api/pokemon/search/${query}`
+  return `https://hungry-woolly-leech.glitch.me/api/pokemon/search/${query}?chaos=true`
 }
 
 function App() {
   const [pokemonResults, setPokemonResults] = useState<Pokemon[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [nextToken, setNextToken] = useState("");
 
-  function handleSearchChange(e: React.FormEvent<HTMLInputElement>): void {
-    console.log("input change")
+  async function handleSearchChange(e: React.FormEvent<HTMLInputElement>) {
     const currentQuery = e.currentTarget.value;
     setPokemonResults([]);
     setSearchTerm(currentQuery);
     if (currentQuery) {
-      getPokemonResultFromAPI(currentQuery, null);
+      try {
+        const allResults = await getPokemonResultFromAPI(currentQuery, null);
+        setPokemonResults(allResults);
+      } catch(err) {
+        console.error(err)
+      }
     }
   }
 
-  useEffect(() => {
-    if (nextToken) {
-      console.log("use effect", searchTerm, nextToken)
-      getPokemonResultFromAPI(searchTerm, nextToken);
-    }
-  }, [searchTerm, nextToken])
-
-  async function getPokemonResultFromAPI(query: string, nextPageToken: string | null) {
-    console.log(query, nextPageToken)
+  async function getPokemonResultFromAPI(query: string, nextPageToken: string | null, allResults: Pokemon[] = []): Promise<Pokemon[]> {
     const URL = formatSearchURL(query, nextPageToken);
     
     try {
       const response = await fetch(URL);
       if (response.ok) {
         var results = await response.json();
+        allResults.push(...results.pokemon)
       } else {
-        throw Error("Something happened when searching for pokemon.");
+        // Retry under chaos mode
+        return getPokemonResultFromAPI(query, nextPageToken, allResults);
       }
 
       const newNextPage = results.nextPage;
       if (newNextPage) {
-        setNextToken(newNextPage);
-        setPokemonResults(prevResults => [...prevResults, ...results.pokemon]);
+        return getPokemonResultFromAPI(query, newNextPage, allResults);
       } else {
-        setNextToken("");
-        setPokemonResults(prevResults => [...prevResults, ...results.pokemon]);
+        return allResults;
       }
     } catch (err) {
       console.error(err)
+      return allResults;
     }
   }
 
