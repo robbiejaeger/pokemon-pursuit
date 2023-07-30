@@ -63,11 +63,14 @@ function App() {
     <div className="App">
       <h1>Pokemon Pursuit</h1>
 
-      <input 
-        value={searchTerm} 
-        onChange={handleSearchChange} 
-        type="text"
-      />
+      <label> 
+        Search Pokemon Name:
+        <input 
+          value={searchTerm} 
+          onChange={handleSearchChange} 
+          type="text"
+        />
+      </label>
 
       <ShowAppState appState={appState} searchTerm={searchTerm} />
 

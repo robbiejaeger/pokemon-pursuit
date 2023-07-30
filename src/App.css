@@ -1,3 +1,13 @@
 .App {
   text-align: center;
 }
+
+input {
+  margin: 20px 5px;
+}
+
+.pokemon {
+  border: 1px solid black;
+  max-width: 200px;
+  margin: 10px auto;
+}

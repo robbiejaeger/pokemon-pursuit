@@ -7,7 +7,7 @@ type PokemonListProps = {
 function PokemonList({ pokemonResults }: PokemonListProps) {
   const pokemonEls = pokemonResults.map(pokemon => {
     return (
-      <article key={pokemon.id}>
+      <article className="pokemon" key={pokemon.id}>
         <h2>{pokemon.name}</h2>
         <p>{pokemon.classfication}</p>
       </article>
