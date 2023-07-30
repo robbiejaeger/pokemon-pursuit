@@ -3,3 +3,5 @@ export type Pokemon = {
   name: string;
   classfication: string;
 }
+
+export type AppState = "UNREQUESTED" | "EMPTY_RESULTS" | "LOADING" | "ERROR" | "FETCHED_RESULTS";

@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import './App.css';
-import { Pokemon } from './types';
+import { Pokemon, AppState } from './types';
 import PokemonList from './PokemonList';
+import ShowAppState from './ShowAppState';
 
 function formatSearchURL(query: string, nextPageToken: string | null): string {
   if (nextPageToken) {
-    return `https://hungry-woolly-leech.glitch.me/api/pokemon/search/${query}?page=${nextPageToken}&chaos=true`
+    return `https://hungry-woolly-leech.glitch.me/api/pokemon/search/${query}?page=${nextPageToken}&chaos=true`;
   }
-  return `https://hungry-woolly-leech.glitch.me/api/pokemon/search/${query}?chaos=true`
+  return `https://hungry-woolly-leech.glitch.me/api/pokemon/search/${query}?chaos=true`;
 }
 
 function App() {
   const [pokemonResults, setPokemonResults] = useState<Pokemon[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [appState, setAppState] = useState<AppState>("UNREQUESTED");
 
   async function handleSearchChange(e: React.FormEvent<HTMLInputElement>) {
     const currentQuery = e.currentTarget.value;
@@ -20,11 +22,15 @@ function App() {
     setSearchTerm(currentQuery);
     if (currentQuery) {
       try {
+        setAppState("LOADING");
         const allResults = await getPokemonResultFromAPI(currentQuery, null);
+        setAppState("FETCHED_RESULTS");
         setPokemonResults(allResults);
       } catch(err) {
-        console.error(err)
+        console.error(err);
       }
+    } else {
+      setAppState("UNREQUESTED");
     }
   }
 
@@ -63,7 +69,9 @@ function App() {
         type="text"
       />
 
-      <PokemonList pokemonResults={pokemonResults}/>
+      <ShowAppState appState={appState} searchTerm={searchTerm} />
+
+      <PokemonList pokemonResults={pokemonResults} />
     </div>
   );
 }
