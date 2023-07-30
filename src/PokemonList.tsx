@@ -4,7 +4,6 @@ type PokemonListProps = {
   pokemonResults: Pokemon[]
 };
 
-
 function PokemonList({ pokemonResults }: PokemonListProps) {
   const pokemonEls = pokemonResults.map(pokemon => {
     return (
