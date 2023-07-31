@@ -3,9 +3,10 @@ import { AppState } from './types';
 type ShowAppStateProps = {
   appState: AppState;
   searchTerm: string;
+  errorInfo: string;
 }
 
-function ShowAppState({ appState, searchTerm }: ShowAppStateProps) {
+function ShowAppState({ appState, searchTerm, errorInfo }: ShowAppStateProps) {
   switch (appState) {
     case "UNREQUESTED":
       return <p>Type in the input above to find some Pokemon!</p>
@@ -14,7 +15,7 @@ function ShowAppState({ appState, searchTerm }: ShowAppStateProps) {
     case "LOADING":
       return <p>Loading results...</p>
     case "ERROR":
-      return <p>Something went wrong. Please try again later.</p>
+      return <p>{errorInfo}</p>
     case "FETCHED_RESULTS":
       return null;
     default:
