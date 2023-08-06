@@ -1,0 +1,14 @@
+{
+  "pokemon": [
+    {
+        "id": 24,
+        "name": "Arbok",
+        "classfication": "Cobra Pokémon"
+    },
+    {
+        "id": 59,
+        "name": "Arcanine",
+        "classfication": "Legendary Pokémon"
+    }
+  ]
+}

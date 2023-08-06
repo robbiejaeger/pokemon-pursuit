@@ -1,0 +1,15 @@
+{
+  "pokemon": [
+    {
+      "id": 1,
+      "name": "Bulbasaur",
+      "classfication": "Seed Pokémon"
+    },
+    {
+        "id": 9,
+        "name": "Blastoise",
+        "classfication": "Shellfish Pokémon"
+    }
+  ],
+  "nextPage": "MTE="
+}

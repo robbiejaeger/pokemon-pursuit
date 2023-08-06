@@ -1,0 +1,14 @@
+{
+  "pokemon": [
+    {
+      "id": 12,
+      "name": "Butterfree",
+      "classfication": "Butterfly Pokémon"
+    },
+    {
+        "id": 15,
+        "name": "Beedrill",
+        "classfication": "Poison Bee Pokémon"
+    }
+  ]
+}
