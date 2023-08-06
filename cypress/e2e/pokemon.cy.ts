@@ -44,9 +44,12 @@ describe("Sad Path Results", () => {
     cy.contains("No results for az.");
   });
 
-  it("Displays message for server error", () => {
+  it("Displays message for server error on the first request", () => {
     cy.visit("http://localhost:3000");
 
+    cy.intercept("https://hungry-woolly-leech.glitch.me/api/pokemon/search/a", { statusCode: 500 });
 
+    cy.get("input").type("a");
+    cy.contains("We tried to get results, but something went wrong. Try again later.");
   });
 });
